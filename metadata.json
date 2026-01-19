@@ -1,0 +1,7 @@
+{
+  "name": "MetaMetrics AI Optimizer",
+  "description": "Analise suas métricas do Meta Business Manager usando a IA Gemini para obter insights de otimização profissionais e recomendações baseadas em dados.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
