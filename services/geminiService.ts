@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { MetaMetric, AnalysisResult } from "../types";
+import { MetaMetric, AnalysisResult } from "../types.ts";
 
 export const analyzeMetrics = async (data: MetaMetric[]): Promise<AnalysisResult> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -8,12 +8,12 @@ export const analyzeMetrics = async (data: MetaMetric[]): Promise<AnalysisResult
   const prompt = `Analise as seguintes métricas de anúncios do Meta (Facebook Ads) e forneça recomendações profissionais de otimização em PORTUGUÊS do Brasil.
   Dados: ${JSON.stringify(data)}
   
-  Por favor, forneça:
-  1. Um resumo conciso da performance.
-  2. 3-5 recomendações específicas (escala, criativo, segmentação ou redução de custo).
-  3. Uma pontuação geral de otimização (0-100).
+  Por favor, forneça o resultado em JSON com:
+  1. Um resumo (summary) conciso da performance.
+  2. 3-5 recomendações (recommendations) com type (scaling, reduction, creative, or targeting), title, description, impact (high, medium, or low) e action (ação sugerida).
+  3. Uma pontuação (score) geral de otimização (0-100).
   
-  IMPORTANTE: Responda obrigatoriamente em PORTUGUÊS.`;
+  IMPORTANTE: O texto deve estar em PORTUGUÊS.`;
 
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
@@ -30,10 +30,10 @@ export const analyzeMetrics = async (data: MetaMetric[]): Promise<AnalysisResult
             items: {
               type: Type.OBJECT,
               properties: {
-                type: { type: Type.STRING, description: "scaling, reduction, creative, or targeting" },
+                type: { type: Type.STRING },
                 title: { type: Type.STRING },
                 description: { type: Type.STRING },
-                impact: { type: Type.STRING, description: "high, medium, or low" },
+                impact: { type: Type.STRING },
                 action: { type: Type.STRING }
               },
               required: ["type", "title", "description", "impact", "action"]

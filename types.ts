@@ -29,5 +29,11 @@ export interface AnalysisResult {
 export interface AdAccount {
   id: string;
   name: string;
-  status: 'active' | 'paused';
+  account_id: string;
+}
+
+export interface MetaConnection {
+  accessToken: string;
+  adAccountId: string;
+  accountName?: string;
 }
